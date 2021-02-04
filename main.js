@@ -214,7 +214,6 @@ function sortTV() {
   })
   return result;
 }
-console.log(sortTV())
 
 //Opdracht 3a: Wat is onze doelopbrengst? Bereken wat de totale opbrengst is, als we alle exemplaren van ieder type zouden verkopen. Geef dit in het blauw weer op de pagina.
 //  [ ] Bereken de opbrengst door per product de originalStock te vermenigvuldigen met de prijs
@@ -232,7 +231,6 @@ function berekenTotaalopbrengst() {
 
 //Opdracht 3b: Hoeveel hebben we tot nu toe verdiend? Bereken hoeveel we tot nu toe verdiend hebben met het aantal verkochte tv's. Geef dit in het groen weer op de pagina.
 // [ ] Bereken hoeveel tot nu toe verdiend is door sold en price te vermenigvuldigen
-// [ ] Voeg een nieuw element toe met deze functie en pas de styling aan in css
 
 function opbrengstHuidig() {
   let opbrengstTotaal=0;
@@ -243,7 +241,79 @@ function opbrengstHuidig() {
   }
   return opbrengstTotaal;
 }
-console.log(opbrengstHuidig());
+
+// [ ] Voeg een nieuw element toe met deze functie en pas de styling aan in css
+const huidigeOpbrengst=document.createElement("p");
+huidigeOpbrengst.textContent="De huidige opbrengst is " + opbrengstHuidig() + " euro.";
+huidigeOpbrengst.setAttribute("id", "opbrengst")
+pagina.appendChild(huidigeOpbrengst);
 
 //Opdracht 4: Geef de typenamen van twee tv's weer op de pagina. Welke tv's dat precies zijn, maakt niet zoveel uit. Voor nu betekent dit dat je het appenden van de nodes twee keer moet uitschrijven, dat is niet erg!
+// Sla met filter() de twee typenamen op
+const tv1=inventory.find((tv)=>{
+  return tv.type==='43PUS6504/12'
+})
 
+const tv2=inventory.find((tv)=> {
+  return tv.type === 'NH3216SMART'
+})
+
+const tv1tv2=document.createElement("p")
+tv1tv2.textContent="TV nummer 1 is: " + tv1.type + " en TV nummer  2 is: "+ tv2.type;
+pagina.appendChild(tv1tv2);
+
+//Opdracht 5a: Zorg ervoor dat er een string wordt gegenereerd voor de naam van een tv. Maak een functie die één tv-object als parameter verwacht en de naam op de volgende manier samenvoegt: [merk] [type] - [naam] zoals Philips 43PUS6504/12 - 4K TV of NIKKEI NH3216SMART - HD smart TV. Zorg ervoor dat je deze functie voor iedere tv zou kunnen gebruiken.
+function printTV (tvname) {
+  for (let i = 0; i < inventory.length; i++) {
+    let tv=inventory[i];
+    if (tv.name===tvname) {
+      return tv.brand + " " + tv.type + " - " + tv.name;
+    }
+  }
+}
+
+//Opdracht 5b: Zorg ervoor dat de prijs van een tv netjes geformat wordt. Maak een functie die één tv-prijs als parameter verwacht (zoals 379) en daar de volgende string van maakt: €379,-. Zorg ervoor dat je deze functie voor iedere tv zou kunnen gebruiken.
+function formatPrice(price) {
+  return "€" + price + ",-"
+}
+
+//Opdracht 5c: Zorg ervoor dat er een string wordt gegenereerd voor alle beschikbare schermgroottes van één tv in zowel inches als cm Maak een functie die één screen-sizes array verwacht en de groottes op de volgende manier samenvoegt: [schermgrootte] inches ([schermgrootte omgerekend]cm) | [schermgrootte] inches ([schermgrootte omgerekend]cm) etc. Dus een input van [32] geeft 32 inch (81 cm) en een input van [43, 50, 55, 58] geeft 43 inch (109 cm) | 50 inch (127 cm) | 58 inch (147 cm). Zorg ervoor dat je deze functie voor iedere tv zou kunnen gebruiken, zowel voor tv's met maar één schermgrootte als met tientallen schermgroottes.
+function screenSize(sizesArray) {
+  let scheidingsteken = " | "
+  let resultaat = ""
+  for (let i = 0; i < sizesArray.length; i++) {
+    let element = sizesArray[i];
+    resultaat = resultaat + element + " inch " + "(" + Math.round((element * 2.54)) + " cm)";
+    if (sizesArray.length > 1 && i < sizesArray.length - 1) {
+      resultaat = resultaat + scheidingsteken;
+    }
+  }
+  return resultaat;
+}
+
+//Opdracht 5d: Zorg ervoor de informatie van één van de twee tv's zoals het voorbeeld wordt weergegeven op de pagina. Gebruik hiervoor de functies die je hebt gemaakt in opdracht 5a, 5b en 5c.
+const typeinfo = document.createElement("p");
+const prijsinfo = document.createElement("p");
+const scherminfo = document.createElement("p");
+typeinfo.textContent=printTV('4K TV')
+prijsinfo.textContent=formatPrice(379)
+scherminfo.textContent=screenSize([43, 50, 58, 65]);
+pagina.appendChild(typeinfo);
+pagina.appendChild(prijsinfo);
+pagina.appendChild(scherminfo);
+
+//Opdracht 5e: Schrijf een functie die ALLE tv's weergeeft op de pagina zoals in het voorbeeld. Dit wil je natuurlijk niet acht keer opnieuw schrijven, want nu zijn het 8 tv's, maar in de toekomst misschien wel 200! Gebruik in deze functie de voorgaande functies die je hebt geschreven, om onderdelen van de data te formatten. Deze "tv-generator-functie" verwacht één parameter: de volledige array met tv-objecten. Vergeet 'm niet aan te roepen!
+//Print PER TV: [merk] [type] - [naam] (functie printTV())
+//Print PER TV: prijs (functie formatPrice())
+//Print PER TV: schermgrootte(s) (functie screenSize())
+function tvgenerator(inventory) {
+  let resultaat=""
+  for (let i = 0; i < inventory.length; i++) {
+    let tv= inventory[i];
+    resultaat= resultaat+ "\n" + printTV(tv.name) + "\n" + formatPrice(tv.price) + "\n" + screenSize(tv.availableSizes)
+  }
+  return resultaat;
+}
+
+const tvOverzicht=document.createElement("p")
+tvOverzicht.textContent=tvgenerator(inventory);
