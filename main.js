@@ -228,6 +228,11 @@ function berekenTotaalopbrengst() {
   return opbrengstTotaal;
 }
 
+const opbrengstDoel=document.createElement("p");
+opbrengstDoel.setAttribute("id", "opbrengstdoel");
+opbrengstDoel.textContent="De doelopbrengst is: " + berekenTotaalopbrengst() + " euro.";
+pagina.appendChild(opbrengstDoel);
+
 //Opdracht 3b: Hoeveel hebben we tot nu toe verdiend? Bereken hoeveel we tot nu toe verdiend hebben met het aantal verkochte tv's. Geef dit in het groen weer op de pagina.
 
 function opbrengstHuidig() {
@@ -242,7 +247,7 @@ function opbrengstHuidig() {
 
 // [ ] Voeg een nieuw element toe met deze functie en pas de styling aan in css
 const huidigeOpbrengst=document.createElement("p");
-huidigeOpbrengst.textContent="De huidige opbrengst is " + opbrengstHuidig() + " euro.";
+huidigeOpbrengst.textContent="De huidige opbrengst is: " + opbrengstHuidig() + " euro.";
 huidigeOpbrengst.setAttribute("id", "opbrengst")
 pagina.appendChild(huidigeOpbrengst);
 
@@ -257,6 +262,7 @@ const tv2=inventory.find((tv)=> {
 })
 
 const tv1tv2=document.createElement("p")
+tv1tv2.setAttribute("id", "opdracht4")
 tv1tv2.textContent="TV nummer 1 is: " + tv1.type + " en TV nummer  2 is: "+ tv2.type;
 pagina.appendChild(tv1tv2);
 
@@ -291,14 +297,19 @@ function screenSize(sizesArray) {
 
 //Opdracht 5d: Zorg ervoor de informatie van één van de twee tv's zoals het voorbeeld wordt weergegeven op de pagina. Gebruik hiervoor de functies die je hebt gemaakt in opdracht 5a, 5b en 5c.
 const typeinfo = document.createElement("p");
+typeinfo.setAttribute("id", "typeinfo");
 const prijsinfo = document.createElement("p");
+prijsinfo.setAttribute("id", "prijsinfo");
 const scherminfo = document.createElement("p");
+scherminfo.setAttribute("id", "scherminfo");
 typeinfo.textContent=printTV('4K TV')
 prijsinfo.textContent=formatPrice(379)
 scherminfo.textContent=screenSize([43, 50, 58, 65]);
-pagina.appendChild(typeinfo);
-pagina.appendChild(prijsinfo);
-pagina.appendChild(scherminfo);
+
+const container=document.getElementById("container");
+container.appendChild(typeinfo);
+container.appendChild(prijsinfo);
+container.appendChild(scherminfo);
 
 //Opdracht 5e: Schrijf een functie die ALLE tv's weergeeft op de pagina zoals in het voorbeeld. Dit wil je natuurlijk niet acht keer opnieuw schrijven, want nu zijn het 8 tv's, maar in de toekomst misschien wel 200! Gebruik in deze functie de voorgaande functies die je hebt geschreven, om onderdelen van de data te formatten. Deze "tv-generator-functie" verwacht één parameter: de volledige array met tv-objecten. Vergeet 'm niet aan te roepen!
 
@@ -306,14 +317,15 @@ function tvgenerator(inventory) {
     for (let i = 0; i < inventory.length; i++) {
         let tv = inventory[i];
         const tvNaam=document.createElement("p");
+        const overzicht=document.getElementById("overzicht");
         tvNaam.textContent=printTV(tv.name);
-        pagina.appendChild(tvNaam);
+        overzicht.appendChild(tvNaam);
         const tvPrijs=document.createElement("p");
         tvPrijs.textContent=formatPrice(tv.price);
-        pagina.appendChild(tvPrijs);
+        overzicht.appendChild(tvPrijs);
         const tvScherm=document.createElement("p");
         tvScherm.textContent=screenSize(tv.availableSizes);
-        pagina.appendChild(tvScherm);
+        overzicht.appendChild(tvScherm);
     }
 }
 
