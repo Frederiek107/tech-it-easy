@@ -163,8 +163,6 @@ const inventory = [
 ];
 
 //Opdracht 1a: Hoeveel exemplaren moeten we nog verkopen? Schrijf een functie die dit berekent.
-//      [ ] Schrijf een functie met een loop
-//      [ ] Doorloop alle waardes originalStock en alle waardes sold. Houd van beide apart een teller bij en bereken de uitkomst.
 
 function toBeSold() {
   let tellerStock=0;
@@ -177,7 +175,7 @@ function toBeSold() {
 }
 
 //Opdracht 1b: Zorg ervoor dat dit aantal in het rood wordt weergegeven op de pagina
-//      [ ] Maak een element aan die de functie print, geef een id mee aan de functie dmv setAttribute en pas de styles.css aan
+
 const voorraadmelding=document.createElement("p");
 voorraadmelding.textContent="Er moeten nog " + toBeSold() + " producten worden verkocht.";
 voorraadmelding.setAttribute("id", "stock");
@@ -185,39 +183,40 @@ const pagina=document.getElementById("pagina");
 pagina.appendChild(voorraadmelding);
 
 //Opdracht 2a: Gebruik een array-methode om een array te maken met alle tv-type namen.
-//      [ ] Gebruik de methode map() om een nieuwe array terug te geven met alle waardes "type"
 
 const tvtypen = inventory.map((tv)=> {
   return tv.type;
 })
 
 //Opdracht 2b: Gebruik een array-methode om alle tv's te verzamelen (de hele objecten) die volledig uitverkocht zijn.
-//      [ ] Gebruik de methode filter() met de conditie dat sold en originalStock gelijk zijn
+//Omgezet naar functie ivm bonusopdracht
 
-const soldOut=inventory.filter((tv)=>{
-  return tv.originalStock===tv.sold;
-})
+function soldOut() {
+    console.log (inventory.filter((tv)=>{
+        return tv.originalStock===tv.sold;
+    }));
+}
 
 //Opdracht 2c: Gebruik een array-methode om alle tv's te verzamelen (de hele objecten) die over AmbiLight beschikken.
-//      [ ] Gebruik de methode filter() met conditie ambiLight===false
+//Omgezet naar functie ivm bonusopdracht
 
-const hasAmbiLight = inventory.filter((tv)=>{
-  return tv.options.ambiLight===true;
-})
+function hasAmbiLight() {
+    console.log(inventory.filter((tv)=>{
+        return tv.options.ambiLight===true;
+    }));
+}
 
 //Opdracht 2d: Schrijf een functie die alle tv's van laagste naar hoogste prijs sorteert.
-//      [ ] Gebruik de methode sort() en vergelijk de huidige price (a) met de vorige price (b). Bij een lagere prijs volgt een negatief getal moet a voor b komen te staan.
 
 function sortTV() {
   const result = inventory.sort((a,b) => {
     return a.price-b.price;
   })
+    console.log(result);
   return result;
 }
 
 //Opdracht 3a: Wat is onze doelopbrengst? Bereken wat de totale opbrengst is, als we alle exemplaren van ieder type zouden verkopen. Geef dit in het blauw weer op de pagina.
-//  [ ] Bereken de opbrengst door per product de originalStock te vermenigvuldigen met de prijs
-//  [ ] Tel deze getallen op
 
 function berekenTotaalopbrengst() {
   let opbrengstTotaal = 0;
@@ -230,7 +229,6 @@ function berekenTotaalopbrengst() {
 }
 
 //Opdracht 3b: Hoeveel hebben we tot nu toe verdiend? Bereken hoeveel we tot nu toe verdiend hebben met het aantal verkochte tv's. Geef dit in het groen weer op de pagina.
-// [ ] Bereken hoeveel tot nu toe verdiend is door sold en price te vermenigvuldigen
 
 function opbrengstHuidig() {
   let opbrengstTotaal=0;
@@ -249,7 +247,7 @@ huidigeOpbrengst.setAttribute("id", "opbrengst")
 pagina.appendChild(huidigeOpbrengst);
 
 //Opdracht 4: Geef de typenamen van twee tv's weer op de pagina. Welke tv's dat precies zijn, maakt niet zoveel uit. Voor nu betekent dit dat je het appenden van de nodes twee keer moet uitschrijven, dat is niet erg!
-// Sla met filter() de twee typenamen op
+
 const tv1=inventory.find((tv)=>{
   return tv.type==='43PUS6504/12'
 })
@@ -303,17 +301,24 @@ pagina.appendChild(prijsinfo);
 pagina.appendChild(scherminfo);
 
 //Opdracht 5e: Schrijf een functie die ALLE tv's weergeeft op de pagina zoals in het voorbeeld. Dit wil je natuurlijk niet acht keer opnieuw schrijven, want nu zijn het 8 tv's, maar in de toekomst misschien wel 200! Gebruik in deze functie de voorgaande functies die je hebt geschreven, om onderdelen van de data te formatten. Deze "tv-generator-functie" verwacht één parameter: de volledige array met tv-objecten. Vergeet 'm niet aan te roepen!
-//Print PER TV: [merk] [type] - [naam] (functie printTV())
-//Print PER TV: prijs (functie formatPrice())
-//Print PER TV: schermgrootte(s) (functie screenSize())
+
 function tvgenerator(inventory) {
-  let resultaat=""
-  for (let i = 0; i < inventory.length; i++) {
-    let tv= inventory[i];
-    resultaat= resultaat+ "\n" + printTV(tv.name) + "\n" + formatPrice(tv.price) + "\n" + screenSize(tv.availableSizes)
-  }
-  return resultaat;
+    for (let i = 0; i < inventory.length; i++) {
+        let tv = inventory[i];
+        const tvNaam=document.createElement("p");
+        tvNaam.textContent=printTV(tv.name);
+        pagina.appendChild(tvNaam);
+        const tvPrijs=document.createElement("p");
+        tvPrijs.textContent=formatPrice(tv.price);
+        pagina.appendChild(tvPrijs);
+        const tvScherm=document.createElement("p");
+        tvScherm.textContent=screenSize(tv.availableSizes);
+        pagina.appendChild(tvScherm);
+    }
 }
 
-const tvOverzicht=document.createElement("p")
-tvOverzicht.textContent=tvgenerator(inventory);
+tvgenerator(inventory);
+
+
+
+
